@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Great Fire of London — Pepys, Wren & the Rebuilding</title>
+<meta name="description" content="An interactive architectural history module about the Great Fire of London, Samuel Pepys, Sir Christopher Wren and the rebuilding of the City.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+:root{--ink:#24313a;--muted:#68747c;--paper:#fbf8f0;--cream:#eee8db;--brick:#994d2d;--gold:#b18a45;--line:#d8d0c0;--dark:#26343b;--white:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.58}
+a{color:#7e3d27}a:hover{text-decoration:none}.wrap{max-width:1180px;margin:auto;padding:0 20px}
+.hero{background:linear-gradient(135deg,#28353b,#4a3a31);color:#fff;padding:58px 0 48px;border-bottom:5px solid var(--brick)}
+.hero h1{font-size:clamp(2.2rem,6vw,4.7rem);line-height:.98;margin:0 0 16px;max-width:900px}
+.hero p{font-size:1.18rem;max-width:760px;color:#eee8df}
+.kicker{letter-spacing:.13em;text-transform:uppercase;font:700 .75rem Arial,sans-serif;color:#e0c58b}
+.nav{position:sticky;top:0;z-index:20;background:rgba(251,248,240,.97);border-bottom:1px solid var(--line);box-shadow:0 2px 10px #0000000d}
+.nav .wrap{display:flex;gap:6px;overflow:auto;padding-top:8px;padding-bottom:8px}.nav a{white-space:nowrap;text-decoration:none;color:var(--ink);font:700 .83rem Arial,sans-serif;padding:10px 12px;border-radius:7px}.nav a:hover{background:var(--cream)}
+section{padding:55px 0}.section-head{max-width:850px;margin-bottom:24px}.section-head h2{font-size:2.25rem;line-height:1.1;margin:.15em 0}.section-head p{color:var(--muted);font-size:1.05rem}
+.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:20px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}.card h3{margin-top:.1rem}.note{background:#f0ebe1;border-left:4px solid var(--brick);padding:15px 17px;border-radius:4px}.small{font: .84rem/1.5 Arial,sans-serif;color:var(--muted)}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:20px}.time{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px}.time strong{display:block;font-size:1.2rem;color:var(--brick)}
+#map{height:560px;border-radius:12px;border:1px solid var(--line);overflow:hidden}.map-caption{font:.8rem Arial,sans-serif;color:var(--muted);margin-top:8px}
+.route-legend{display:flex;gap:12px;flex-wrap:wrap;font:.8rem Arial,sans-serif;margin:10px 0}.legend-line{width:30px;border-top:4px dashed var(--brick);display:inline-block;vertical-align:middle;margin-right:5px}.legend-fire{width:20px;height:12px;background:#c87550;opacity:.3;border:1px solid #994d2d;display:inline-block;vertical-align:middle;margin-right:5px}
+.map-stops{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.stop{border:1px solid var(--line);background:#fff;border-radius:8px;padding:12px}.stop button{background:var(--dark);color:#fff;border:0;border-radius:6px;padding:8px 10px;cursor:pointer;margin-top:7px}
+.image{width:100%;height:230px;object-fit:cover;border-radius:8px;background:#ddd}.image.tall{height:300px}.caption{font:.78rem/1.4 Arial,sans-serif;color:var(--muted);margin-top:6px}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.gallery figure{margin:0}.gallery img{width:100%;height:270px;object-fit:cover;border-radius:9px;border:1px solid var(--line)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}.compare>div{padding:20px}.compare .old{background:#e8e0d1}.compare .new{background:#f7f7f5}
+.arch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.arch-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:17px}.arch-card .tag{font:700 .68rem Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--brick)}
+.feature{background:var(--dark);color:#fff;border-radius:14px;padding:26px}.feature h3{font-size:1.45rem;margin-top:0}.feature p{color:#e8e2d8}
+.reveal{border:1px solid var(--line);border-radius:8px;margin-top:12px}.reveal button{width:100%;text-align:left;background:#fff;border:0;padding:13px 15px;font:700 1rem Georgia;cursor:pointer}.reveal div{display:none;padding:0 15px 15px;background:#f5f1e8}.reveal.open div{display:block}
+.quiz-q{padding:18px 0;border-top:1px solid var(--line)}.quiz-q button{display:block;width:100%;margin:7px 0;text-align:left;background:#fff;border:1px solid var(--line);padding:10px;border-radius:7px;cursor:pointer;font:inherit}.quiz-q button.correct{background:#e6f1e7;border-color:#5d8663}.quiz-q button.wrong{background:#f5e5e1;border-color:#a15a45}
+footer{background:#26343b;color:#e8e1d5;padding:40px 0;font:.83rem/1.5 Arial,sans-serif}.credits{columns:2;column-gap:35px}.credits p{break-inside:avoid}
+@media(max-width:800px){.grid2,.grid3,.gallery,.arch-grid,.compare{grid-template-columns:1fr}.timeline{grid-template-columns:1fr 1fr}.map-stops{grid-template-columns:1fr}#map{height:500px}.hero{padding-top:40px}}
+@media(max-width:520px){.wrap{padding:0 14px}.timeline{grid-template-columns:1fr}.nav a{padding:9px}.gallery img{height:220px}}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<div class="kicker">Interactive architectural history module</div>
+<h1>The Great Fire of London</h1>
+<p><strong>Pepys, the Thames, Wren and the rebuilding of a city.</strong><br>
+Follow Samuel Pepys through the burning City, map the destruction, and investigate how fire helped transform London's architecture.</p>
+</div>
+</header>
+
+<nav class="nav"><div class="wrap">
+<a href="#story">Story</a><a href="#pepys">Pepys map</a><a href="#fire">Fire & evidence</a><a href="#rebuild">Rebuilding</a><a href="#churches">Wren's churches</a><a href="#stpaul">St Paul's</a><a href="#quiz">Quiz</a>
+</div></nav>
+
+<main>
+<section id="story"><div class="wrap">
+<div class="section-head"><div class="kicker">01 · The event</div><h2>Four days that changed the City</h2>
+<p>The fire began in a bakery in Pudding Lane in the early hours of Sunday 2 September 1666. It spread through the densely built City before finally being brought under control on 5–6 September.</p></div>
+<div class="timeline">
+<div class="time"><strong>2 Sept</strong>Fire begins near Pudding Lane. Pepys sees the growing blaze.</div>
+<div class="time"><strong>3 Sept</strong>Wind drives the fire through the City. Evacuation intensifies.</div>
+<div class="time"><strong>4 Sept</strong>Fire reaches the area around St Paul's. Houses are demolished as firebreaks.</div>
+<div class="time"><strong>5 Sept</strong>Pepys takes valuables by boat towards Woolwich.</div>
+<div class="time"><strong>6 Sept</strong>Fire is effectively under control. The rebuilding problem begins.</div>
+</div>
+<p class="note" style="margin-top:20px"><strong>Scale:</strong> London Museum records about 13,200 houses and 87 churches destroyed. The devastated area covered roughly 436 acres. The destruction was enormous, but the fire did not consume all of London. <a href="https://www.londonmuseum.org.uk/collections/london-stories/great-fire-of-london/" target="_blank" rel="noopener">London Museum: Great Fire</a>.</p>
+</div></section>
+
+<section id="pepys" style="background:#f0ece3"><div class="wrap">
+<div class="section-head"><div class="kicker">02 · Primary source + geography</div><h2>Follow Pepys</h2>
+<p>Pepys's diary becomes more powerful when the words are placed back onto the geography of seventeenth-century London. The map below uses present-day coordinates; the route is a teaching reconstruction and is labelled approximate where appropriate.</p></div>
+<div class="grid2">
+<div>
+<div id="map" aria-label="Interactive map showing Pepys's route, Great Fire zone and Wren churches"></div>
+<div class="route-legend"><span><i class="legend-line"></i>Pepys's approximate route</span><span><i class="legend-fire"></i>Approximate fire-damaged area</span><span>● stops</span></div>
+<div class="map-stops" id="stopCards"></div>
+<p class="small">The route combines walking and movement by boat. It should not be read as a precise GPS track: Pepys's diary provides locations and journeys, not modern turn-by-turn coordinates.</p>
+</div>
+<div class="card">
+<h3>Read the evidence</h3>
+<p>On 2 September Pepys went towards the Tower, observed the fire from a high point and then travelled by boat. He later went to Whitehall and reported what he had seen to the King and Duke of York.</p>
+<p>On 4 September he walked through the burning City, recording people carrying possessions away and the desperate use of demolition to create firebreaks.</p>
+<p>On 5 September he and others travelled by boat to Woolwich with possessions, from where he could see the City burning.</p>
+<div class="quote" style="border-left:3px solid var(--brick);padding-left:12px;font-style:italic">“From St. Paul's, I walked along Watling Street, everyone was coming away laden with goods they were trying to save...”</div>
+<p class="small">Source: <a href="https://www.nationalarchives.gov.uk/education/resources/great-fire-of-london-examine-the-evidence/extracts-from-samuel-pepys-diary/" target="_blank" rel="noopener">The National Archives — Pepys diary extracts</a>.</p>
+<div class="reveal"><button>Why is the Thames so important?</button><div>The Thames is simultaneously a transport route, an escape route, a place for moving possessions, and a viewing platform. It also helps students understand why Pepys's account moves between land and water.</div></div>
+</div>
+</div>
+</div></section>
+
+<section id="fire"><div class="wrap">
+<div class="section-head"><div class="kicker">03 · Evidence</div><h2>What was actually destroyed?</h2>
+<p>Compare a historical map with the modern city. The surviving street pattern means that students can walk into the same geographical space and ask what has changed.</p></div>
+<div class="grid2">
+<div class="card">
+<img class="image tall" src="https://commons.wikimedia.org/wiki/Special:FilePath/Map.London.gutted.1666.jpg" alt="Hollar map showing the burned area of London after the Great Fire">
+<h3>Hollar's map of the ruined City</h3>
+<p>The white/empty area represents the devastated part of the City. The map is based on Wenceslaus Hollar's 1666 work and is public domain by age according to its Wikimedia Commons record.</p>
+<p><a href="https://commons.wikimedia.org/wiki/File:Map.London.gutted.1666.jpg" target="_blank" rel="noopener">View source and licensing information</a>.</p>
+</div>
+<div class="card">
+<h3>Then → now</h3>
+<div class="compare">
+<div class="old"><strong>1666</strong><br>Timber-framed and jettied buildings, narrow streets, combustible materials, crowded plots.</div>
+<div class="new"><strong>After the Fire</strong><br>Brick and stone construction, regulated heights, more controlled façades, and a new architectural vocabulary.</div>
+</div>
+<p style="margin-top:16px">Ask students to choose a present-day location inside the fire zone and use Google Maps Street View to inspect the street. What traces of the seventeenth-century city remain?</p>
+<p><a href="https://www.google.com/maps/search/?api=1&query=Monument+to+the+Great+Fire+of+London+London" target="_blank" rel="noopener">Open the Monument / Pudding Lane in Google Maps</a></p>
+</div>
+</div>
+<div class="gallery" style="margin-top:20px">
+<figure><img src="https://commons.wikimedia.org/wiki/Special:FilePath/St_Paul%27s_Cathedral_in_London_city.jpg" alt="St Paul's Cathedral today"><figcaption>St Paul's today — the dominant architectural statement of the rebuilt City. Wikimedia Commons, CC-licensed image. <a href="https://commons.wikimedia.org/wiki/File:St_Paul%27s_Cathedral_in_London_city.jpg" target="_blank">source</a>.</figcaption></figure>
+<figure><img src="https://commons.wikimedia.org/wiki/Special:FilePath/St_Mary_le_Bow.jpg" alt="St Mary-le-Bow today"><figcaption>St Mary-le-Bow today — Wren's tower remains a major urban landmark. Wikimedia Commons, CC BY-SA 4.0, Bellminsterboy. <a href="https://commons.wikimedia.org/wiki/File:St_Mary_le_Bow.jpg" target="_blank">source</a>.</figcaption></figure>
+</div>
+</div></section>
+
+<section id="rebuild" style="background:#f0ece3"><div class="wrap">
+<div class="section-head"><div class="kicker">04 · Architecture changes</div><h2>The rebuilding: safety becomes visible</h2>
+<p>Rebuilding was not simply the implementation of one master plan. Wren proposed a much more radically ordered City, but property boundaries, ownership, finance and the need to rebuild quickly meant that much of the existing street network survived.</p></div>
+<div class="grid3">
+<div class="card"><h3>Materials</h3><p>Post-Fire legislation encouraged brick and stone construction. Material choice therefore became a matter of fire safety as well as appearance.</p></div>
+<div class="card"><h3>Street frontage</h3><p>Jetties and overhanging upper floors were restricted. Buildings became visually flatter to the street, helping produce the regular façades associated with later London.</p></div>
+<div class="card"><h3>Roof & parapet</h3><p>Roofs were increasingly concealed behind parapets. The roof became less visually dominant from the street and the façade acquired a stronger horizontal finish.</p></div>
+<div class="card"><h3>Windows</h3><p>Window openings were more tightly regulated. Recessed openings and projecting sills are small architectural details that can be read as both construction and fire-safety devices.</p></div>
+<div class="card"><h3>Classical language</h3><p>Orders, cornices, pediments, round arches and symmetry gave the rebuilt City a more classical visual vocabulary.</p></div>
+<div class="card"><h3>Function</h3><p>The churches in particular had to work as practical spaces: congregations needed to see and hear. Geometry, galleries, clerestories and domes helped solve these problems.</p></div>
+</div>
+<div class="note" style="margin-top:20px"><strong>Architectural detective task:</strong> On a Georgian or Wren-period street, trace the horizontal line made by the window sills. Then identify the parapet, roofline and recessed window openings. Which elements appear decorative? Which also have a practical function?</div>
+</div></section>
+
+<section id="churches"><div class="wrap">
+<div class="section-head"><div class="kicker">05 · Wren's parish churches</div><h2>A laboratory of architectural experiments</h2>
+<p>The rebuilt churches are not copies of one another. They form a family of solutions to the same problems: constrained City sites, congregational visibility and audibility, daylight, circulation, and the need for towers or steeples that could restore a recognizable skyline.</p></div>
+<div class="arch-grid">
+<article class="arch-card"><div class="tag">Centralised space</div><h3>St Stephen Walbrook</h3><p>A compact plan organised around a great central dome. The columns and arches make the interior feel larger than its footprint.</p><p><strong>Look for:</strong> geometry, dome, light, Corinthian order and the relationship between central focus and surrounding circulation.</p><img class="image" src="https://commons.wikimedia.org/wiki/Special:FilePath/St_Stephen_Walbrook_%281%29.jpg" alt="St Stephen Walbrook exterior"><p class="small">Graeme.duckworth, CC BY-SA 4.0. <a href="https://commons.wikimedia.org/wiki/File:St_Stephen_Walbrook_(1).jpg" target="_blank">source</a>.</p><a href="https://www.google.com/maps/search/?api=1&query=St+Stephen+Walbrook+London" target="_blank">Google Maps</a></article>
+
+<article class="arch-card"><div class="tag">Urban landmark</div><h3>St Mary-le-Bow</h3><p>The church combines a practical parish interior with an exceptionally important tower and steeple facing Cheapside.</p><p><strong>Look for:</strong> clerestory light, classical proportions and the tower as a piece of civic identity.</p><img class="image" src="https://commons.wikimedia.org/wiki/Special:FilePath/St_Mary_le_Bow.jpg" alt="St Mary-le-Bow today"><p class="small">Bellminsterboy, CC BY-SA 4.0. <a href="https://commons.wikimedia.org/wiki/File:St_Mary_le_Bow.jpg" target="_blank">source</a>.</p><a href="https://www.google.com/maps/search/?api=1&query=St+Mary-le-Bow+London" target="_blank">Google Maps</a></article>
+
+<article class="arch-card"><div class="tag">Vertical emphasis</div><h3>St Bride's, Fleet Street</h3><p>The tight urban site is answered by a dramatic tower and steeple. The interior uses arches, galleries and a strong longitudinal axis.</p><p><strong>Look for:</strong> how the steeple establishes presence above a narrow street, and how the interior manages light and movement.</p><img class="image" src="https://commons.wikimedia.org/wiki/Special:FilePath/St_Bride%27s%2C_Fleet_Street%2C_London.jpg" alt="St Bride's Church Fleet Street"><p class="small">Amanda Slater, CC-licensed image. <a href="https://commons.wikimedia.org/wiki/File:St_Bride%27s,_Fleet_Street,_London.jpg" target="_blank">source</a>.</p><a href="https://www.google.com/maps/search/?api=1&query=St+Bride%27s+Church+Fleet+Street+London" target="_blank">Google Maps</a></article>
+
+<article class="arch-card"><div class="tag">Compact Baroque</div><h3>St Mary Abchurch</h3><p>An almost square space with a large dome creates a monumental interior on a small urban footprint.</p><p><strong>Look for:</strong> the compression of the plan and the expansion of the interior through the dome.</p><img class="image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Abchurch_Yard_and_Sherborne_Lane.jpg" alt="St Mary Abchurch and surrounding lane"><p class="small">It's No Game, CC BY 2.0. <a href="https://commons.wikimedia.org/wiki/File:Abchurch_Yard_and_Sherborne_Lane.jpg" target="_blank">source</a>.</p><a href="https://www.google.com/maps/search/?api=1&query=St+Mary+Abchurch+London" target="_blank">Google Maps</a></article>
+
+<article class="arch-card"><div class="tag">Central axis</div><h3>St Martin Ludgate</h3><p>A compact classical plan uses columns and vaulting to create a coherent centralised interior despite the constrained City plot.</p><p><strong>Look for:</strong> the relationship between the main axis, central space and the church's position on Ludgate Hill.</p><a href="https://www.google.com/maps/search/?api=1&query=St+Martin+Ludgate+London" target="_blank">Google Maps</a></article>
+
+<article class="arch-card"><div class="tag">Civic classicism</div><h3>St Lawrence Jewry</h3><p>Portland stone, round-headed openings and a strongly composed elevation give this church a more explicitly civic classical character.</p><p><strong>Important caveat:</strong> the church was rebuilt after Second World War damage using Wren's designs, so it is also an excellent case study in reconstruction and authenticity.</p><a href="https://www.google.com/maps/search/?api=1&query=St+Lawrence+Jewry+London" target="_blank">Google Maps</a></article>
+</div>
+<div class="feature" style="margin-top:22px"><h3>Teaching question</h3><p>Wren's churches are often described as “Baroque”. But what does that actually mean in a parish church? Ask students to identify <strong>one spatial feature</strong>, <strong>one structural/material feature</strong>, and <strong>one urban feature</strong> that makes their chosen church different from a medieval parish church.</p></div>
+</div></section>
+
+<section id="stpaul" style="background:#f0ece3"><div class="wrap">
+<div class="section-head"><div class="kicker">06 · The great culmination</div><h2>St Paul's Cathedral</h2>
+<p>Old St Paul's had been a vast Gothic cathedral. Wren's replacement, begun in 1675 and substantially completed by 1710, transformed the skyline and became the most powerful architectural statement of post-Fire London.</p></div>
+<div class="grid2">
+<div class="card"><img class="image tall" src="https://commons.wikimedia.org/wiki/Special:FilePath/St_Paul%27s_Cathedral_in_London_city.jpg" alt="St Paul's Cathedral west and dome"><h3>Read the exterior</h3>
+<ul><li><strong>Classical orders:</strong> columns and pilasters organise the façades.</li><li><strong>West front:</strong> the portico and pediment create a monumental public face.</li><li><strong>Towers:</strong> the flanking towers frame the composition.</li><li><strong>Dome:</strong> a huge centralising element visible far beyond the church itself.</li><li><strong>Scale:</strong> architecture becomes an instrument of urban orientation.</li></ul>
+<a href="https://www.google.com/maps/search/?api=1&query=St+Paul%27s+Cathedral+London" target="_blank">Open St Paul's in Google Maps</a></div>
+<div class="card">
+<h3>Old St Paul's → Wren's St Paul's</h3>
+<div class="compare">
+<div class="old"><strong>Medieval Gothic</strong><ul><li>Longitudinal emphasis</li><li>Verticality</li><li>Pointed arches and Gothic vocabulary</li><li>Complex medieval accretions</li></ul></div>
+<div class="new"><strong>English Baroque</strong><ul><li>Classical geometry</li><li>Monumental dome</li><li>Orders and controlled façades</li><li>Unified spatial composition</li></ul></div>
+</div>
+<div class="reveal"><button>Why isn't this simply “old bad, new good”?</button><div>The comparison is about architectural language and changing priorities, not a judgement that one period was intrinsically superior. The fire created an opportunity to rebuild in a different idiom, while the new cathedral still had to accommodate worship, ceremony, movement, acoustics and a highly constrained historic site.</div></div>
+<div class="reveal"><button>Architectural analysis: light</button><div>Study where light enters and how it is directed. Compare the clerestory, dome and window openings with the diffuse vertical light associated with Gothic cathedral interiors.</div></div>
+<div class="reveal"><button>Architectural analysis: movement</button><div>Trace the longitudinal movement from the west entrance towards the crossing and east end. Then look upward: Wren combines a processional axis with a powerful centralising dome.</div></div>
+<p class="small">Useful further resource: <a href="https://artsandculture.google.com/partner/st-paul-s-cathedral" target="_blank">Google Arts & Culture — St Paul's Cathedral</a>.</p>
+</div></div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<div class="section-head"><div class="kicker">07 · Check your understanding</div><h2>Architectural detective quiz</h2><p>Use the module rather than guessing. The aim is to connect historical evidence with architectural observation.</p></div>
+<div class="card" id="quizBox">
+<div class="quiz-q"><strong>1. Why did rebuilding legislation change architecture as well as fire safety?</strong>
+<button data-a="wrong">Because every street was rebuilt according to Wren's master plan.</button>
+<button data-a="correct">Because materials, building heights and forms were regulated, producing safer and visually different buildings.</button>
+<button data-a="wrong">Because every new church had to have a dome.</button></div>
+<div class="quiz-q"><strong>2. Why is Pepys's route useful?</strong>
+<button data-a="correct">It links eyewitness testimony to actual streets, river movement and changing viewpoints.</button>
+<button data-a="wrong">It provides a precise modern GPS record of the fire.</button>
+<button data-a="wrong">It proves exactly where every flame travelled.</button></div>
+<div class="quiz-q"><strong>3. What problem did Wren's parish churches have to solve?</strong>
+<button data-a="wrong">How to reproduce medieval Gothic vaults.</button>
+<button data-a="correct">How to fit worship, visibility, audibility, light and urban constraints into compact City sites.</button>
+<button data-a="wrong">How to make every church identical.</button></div>
+<div class="quiz-q"><strong>4. What does the window sill illustrate?</strong>
+<button data-a="correct">A small architectural detail can have decorative, weathering, construction and fire-safety implications.</button>
+<button data-a="wrong">It was purely decorative and had no practical role.</button>
+<button data-a="wrong">It was invented by Wren for St Paul's.</button></div>
+<div id="score" style="font-weight:bold;margin-top:12px"></div>
+</div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+<h3>Sources, image credits & notes</h3>
+<div class="credits">
+<p><strong>Historical evidence:</strong> The National Archives, <a href="https://www.nationalarchives.gov.uk/education/resources/great-fire-of-london-examine-the-evidence/extracts-from-samuel-pepys-diary/" target="_blank">Samuel Pepys diary extracts</a>; London Museum, <a href="https://www.londonmuseum.org.uk/collections/london-stories/great-fire-of-london/" target="_blank">Great Fire of London</a>; London Museum, <a href="https://www.londonmuseum.org.uk/collections/london-stories/wenceslaus-hollars-etchings-fashion-fire/" target="_blank">Wenceslaus Hollar</a>; London Museum, <a href="https://www.londonmuseum.org.uk/collections/v/object-466275/a-plan-of-the-city-of-london-after-the-great-fire-in-the-year-of-our-lord-1666-according-to-the-design-and-proposal-of-sir-christopher-wren-kt-for-rebuilding-it/" target="_blank">Wren's rebuilding proposal</a>.</p>
+<p><strong>Map:</strong> Leaflet with OpenStreetMap tiles. The fire boundary is deliberately labelled approximate; it is not a cadastral reconstruction. Pepys's route is an interpretive teaching route based on diary locations.</p>
+<p><strong>Images:</strong> Wikimedia Commons images are linked to their individual source/licensing pages in the module. Check the licence on each source page before republishing commercially. Historical Hollar map: public-domain work as recorded by Wikimedia Commons. Modern photographs are used under their stated Creative Commons licences with attribution.</p>
+<p><strong>Google Maps:</strong> Links open searches in Google Maps. This website does not embed Google Maps tiles or use a Google API key.</p>
+</div>
+<p style="margin-top:20px">Designed as an educational resource. Last checked: September 2026.</p>
+</div></footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const stops=[
+{name:"1 · Seething Lane / Navy Office",lat:51.5101,lng:-0.0794,text:"Pepys lived and worked here. On 2 September he became aware of the growing fire and later returned repeatedly to check his house and possessions.",day:"2–5 September"},
+{name:"2 · Tower of London",lat:51.5081,lng:-0.0759,text:"Pepys went to the Tower and observed the fire from a high point. The Tower also became part of the defensive geography of the eastern City.",day:"2 September"},
+{name:"3 · Pudding Lane",lat:51.5106,lng:-0.0838,text:"The fire began in a bakery in Pudding Lane. Pepys was told of the origin while at the Tower.",day:"2 September"},
+{name:"4 · Thames / Steelyard",lat:51.5118,lng:-0.0910,text:"Pepys travelled by boat along the Thames, observing people moving goods and possessions away from the fire.",day:"2 September"},
+{name:"5 · Whitehall",lat:51.5009,lng:-0.1260,text:"Pepys reported what he had seen to Charles II and the Duke of York. The King ordered stronger action to stop the fire.",day:"2 September"},
+{name:"6 · St Paul's / Watling Street",lat:51.5137,lng:-0.0984,text:"By 4 September the fire had reached the area around St Paul's. Pepys described people carrying possessions away along Watling Street.",day:"4 September"},
+{name:"7 · Tower Street",lat:51.5090,lng:-0.0765,text:"Pepys and Sir William Penn witnessed the fire at close quarters. Houses were demolished to create firebreaks.",day:"4 September"},
+{name:"8 · Woolwich",lat:51.4909,lng:0.0648,text:"On 5 September Pepys travelled by boat with his wife and others, taking possessions to safety. He could see the City burning from Woolwich.",day:"5 September"}
+];
+const map=L.map('map').setView([51.505,-0.09],14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+const route=stops.map(s=>[s.lat,s.lng]);
+L.polyline(route,{color:'#994d2d',weight:4,dashArray:'8 7',opacity:.9}).addTo(map);
+const fire=[
+[51.516,-0.107],[51.518,-0.095],[51.517,-0.084],[51.513,-0.076],[51.507,-0.078],
+[51.503,-0.085],[51.505,-0.101],[51.509,-0.109]
+];
+L.polygon(fire,{color:'#994d2d',fillColor:'#c87550',fillOpacity:.18,weight:2}).addTo(map).bindPopup('<strong>Approximate fire-damaged area</strong><br>Teaching layer, not an exact cadastral boundary.');
+stops.forEach((s,i)=>{
+const m=L.circleMarker([s.lat,s.lng],{radius:7,color:'#26343b',fillColor:'#fff',fillOpacity:1,weight:2}).addTo(map);
+m.bindPopup('<strong>'+s.name+'</strong><br>'+s.day+'<br>'+s.text);
+});
+document.getElementById('stopCards').innerHTML=stops.map((s,i)=>`<div class="stop"><strong>${s.name}</strong><div class="small">${s.day}</div><div>${s.text}</div><button type="button" onclick="map.setView([${s.lat},${s.lng}],16);document.querySelectorAll('.leaflet-marker-icon')">Show on map</button></div>`).join('');
+const churchMarkers=[
+["St Paul's Cathedral",51.5138,-0.0984],
+["St Mary-le-Bow",51.5134,-0.0904],
+["St Stephen Walbrook",51.5126,-0.0899],
+["St Bride's",51.5139,-0.1055],
+["St Mary Abchurch",51.5117,-0.0885],
+["St Martin Ludgate",51.5129,-0.1022],
+["St Lawrence Jewry",51.5151,-0.0928]
+];
+churchMarkers.forEach(c=>L.circleMarker([c[1],c[2]],{radius:5,color:'#b18a45',fillColor:'#b18a45',fillOpacity:.9,weight:1}).addTo(map).bindTooltip(c[0]));
+document.querySelectorAll('.reveal button').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
+let answered=0,score=0;
+document.querySelectorAll('.quiz-q').forEach(q=>{
+q.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+if(q.dataset.done)return;q.dataset.done='1';answered++;
+if(b.dataset.a==='correct'){b.classList.add('correct');score++}else b.classList.add('wrong');
+document.getElementById('score').textContent='Score: '+score+' / '+answered+' answered';
+}));
+});
+</script>
+</body>
+</html>
